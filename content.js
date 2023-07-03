@@ -1,3 +1,26 @@
+console.log("Autofill4JobApply is ready.")
+
+function nearby(element) {
+    let final = []
+  
+    let siblings = element.parentElement.children
+  
+    while (siblings.length > 0 && final.length === 0) {
+      for (let i = 0; i < siblings.length; i++) {
+        if (siblings[i].textContent.trim().length > 0) {
+            final.push(siblings[i].textContent)
+        }
+      }
+  
+      if(final.length == 0) {
+        siblings = siblings[0].parentElement.parentElement.children
+      }
+    }
+
+    return final
+}
+  
+
 function fill(element) {
     let elementType = element.nodeName.toLowerCase()
     let labels = []
@@ -7,7 +30,8 @@ function fill(element) {
 
     let elementData = {
         "type": elementType,
-        "labels": labels
+        "labels": labels,
+        "nearby": nearby(element)
     }
 
     if(elementType == "input") {
@@ -27,8 +51,6 @@ function fill(element) {
 
     console.log(elementData)
 }
-
-// Idea: For values that do not have a question directly linked, start from the element and then move up in the DOM looking for elements with text-content.
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.action === "startAutofill") {
