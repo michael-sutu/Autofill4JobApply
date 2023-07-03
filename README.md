@@ -10,7 +10,8 @@ For some reason sometimes the content.js file does not work so you may need to r
 ☑ Set up an extension.
 
 ☑ Read the contents of the page. 
-- Get all of the form values that need to be filled out. 
+
+☑ Get all of the form values that need to be filled out. 
 - Figure out what the question is for that input.
 - Create the website that allows the user to input their personal information.
 - Fill out feilds based on user information.
