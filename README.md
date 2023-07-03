@@ -12,7 +12,8 @@ For some reason sometimes the content.js file does not work so you may need to r
 ☑ Read the contents of the page. 
 
 ☑ Get all of the form values that need to be filled out. 
-- Figure out what the question is for that input.
+
+☑ Figure out what the question is for that input.
 - Create the website that allows the user to input their personal information.
 - Fill out feilds based on user information.
 - Create a developer dashboard that notifies any feilds that were not able to be filled out as well as where they are located.
