@@ -1,0 +1,42 @@
+body {
+    font-family: arial;
+}
+
+.sidenav {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: lightgrey;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+  
+.sidenav a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    color: black;
+    display: block;
+    top: -20px;
+    position: relative;
+}
+  
+.sidenav a:hover {
+    background-color: darkgrey;
+    cursor: pointer;
+}
+
+.selected {
+    background-color: grey;
+}
+
+.selected:hover {
+    background-color: grey!important;
+}
+
+.main {
+    margin-left: 250px;
+}
