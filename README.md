@@ -2,6 +2,8 @@
 ### How to setup
 Download the files and then put them all into a folder. The go to chrome://extensions/ and toggle on developer mode(top right corner). Next click "Load unpacked" and select the folder that you have put the scripts in. Now the extension should be all up and running! When you update the code you can just press on the refresh button on the extension to make the updates.
 
+To initiate the auto fill go to a website and then click on the plugin. That should bring up a button that says "Start Autofill".
+
 ### TODO
 ☑ Set up an extension.
 
