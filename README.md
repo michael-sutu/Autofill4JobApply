@@ -4,6 +4,7 @@ Download the files and then put them all into a folder. The go to chrome://exten
 
 ### TODO
 ☑ Set up an extension.
+
 ☑ Read the contents of the page. 
 - Get all of the form values that need to be filled out. 
 - Figure out what the question is for that input.
