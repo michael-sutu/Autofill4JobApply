@@ -4,6 +4,8 @@ Download the files and then put them all into a folder. The go to chrome://exten
 
 To initiate the auto fill go to a website and then click on the plugin. That should bring up a button that says "Start Autofill".
 
+For some reason sometimes the content.js file does not work so you may need to remove the extension and then re add it when you want to test a new update.
+
 ### TODO
 ☑ Set up an extension.
 
