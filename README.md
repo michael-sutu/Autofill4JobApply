@@ -1,10 +1,10 @@
 # Autofill4JobApply
 ### How to setup
-Download the files and then put them all into a folder. The go to chrome://extensions/ and toggle on developer mode(top right corner). Next click "Load unpacked" and select the folder that you have put the scripts in. Now the extension should be all up and running! When you update the code you can just press on the refresh button on the extension to make the updates.
+Close the project. Go to chrome://extensions/ and toggle on developer mode (top right corner). Next click "Load unpacked" and select the "Extension" folder in the github repo. Now the extension should be up and running! 
 
-To initiate the auto fill go to a website and then click on the plugin. That should bring up a button that says "Start Autofill".
+You then need to go into the terminal and run `node index.js` to start the dashboard link.
 
-For some reason sometimes the content.js file does not work so you may need to remove the extension and then re add it when you want to test a new update.
+To access the dashboard and the autofill simply just click on the plugin.
 
 ### TODO
 ☑ Set up an extension.
