@@ -12,10 +12,66 @@
         <div class="main">
             <div class="informationDiv">
                 <h1>Autofill4JobApply</h1>
+                <h2>Your userid is </h2>
+                <div class="container" id="userQuestions"></div>
+                <button style="margin-top: 10px;" class="saveBtn">Save</button>
             </div>
             <div class="developerDiv" style="display: none;">
                 <h1>Questions</h1>
+                <button id="addBtn">Add Question</button>
+                <div class="addDiv">
+                    <div class="box">
+                        <h1>Add Question</h2>
+                        <h2>Question</h2>
+                        <input id="questionInput">
+                        <h2>Alternatives</h2>
+                        <input id="alternativesInput">
+                        <button id="alternativesAddBtn">Add</button>
+                        <p id="alternativesList">Alternatives: </p>
+                        <h2>Feilds</h2>
+                        <select class="elementTag" style="margin-bottom: 10px;">
+                            <option disabled selected>Feild Element Tag</option>
+                            <option>&ltinput&gt;</option>
+                            <option>&ltselect&gt;</option>
+                            <option>&lttextarea&gt;</option>
+                        </select><br>
+                        <select class="inputType">
+                            <option disabled selected>Input Type</option>
+                            <option>text</option>
+                            <option>radio</option>
+                            <option>number</option>
+                            <option>range</option>
+                            <option>checkbox</option>
+                            <option>date</option>
+                            <option>file</option>
+                        </select>
+                        <input placeholder="Label" class="label">
+                        <input class="option" id="optionInput">
+                        <button class="option" id="addOptionBtn">Add Option</button>
+                        <p class="option" id="optionsDisplay">Options: </p>
+                        <br><button style="margin-top: 10px; display: none;" id="addFeildBtn">Add Feild</button>
+                        <div class="inputsDiv" style="margin-top: 10px;"></div>
+                        <button style="margin-top: 10px;" id="submitAddBtn">Submit</button>
+                        <button id="cancelAddBtn">Cancel</button>
+                    </div>
+                </div>
+                <div class="container" id="devQuestions"></div>
                 <h1>Unknown Queries</h1>
+                <div>
+                    <p>
+                        {
+                            "type": "textarea",
+                            "labels": [
+                                "Why are you interested in Replit?"
+                            ],
+                            "nearby": [
+                                "Why are you interested in Replit?"
+                            ],
+                            "placeholder": "Type here...",
+                            "value": ""
+                        }
+                    </p>
+                </div>
             </div>
         </div>
         <script src="/script.js"></script>

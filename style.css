@@ -38,5 +38,69 @@ body {
 }
 
 .main {
+    padding: 0px 20px;
     margin-left: 250px;
+}
+
+button {
+    background-color: orange;
+    border-width: 0px;
+    padding: 10px 15px 10px 15px;
+    cursor: pointer;
+    font-family: arial;
+}
+
+button:hover {
+    background-color: darkorange;
+}
+
+.container > div {
+    border: 1px solid black;
+    margin-top: 10px;
+    padding: 0px 10px;
+}
+
+input {
+    margin-bottom: 15px;
+    font-family: arial;
+    border-radius: 0px;
+    border-width: 1px;
+    cursor: pointer;
+    padding: 5px 5px;
+}
+
+.addDiv {
+    display: none;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    min-height: 100%;
+    top: 0%;
+    left: 0%;
+    z-index: 2;
+    margin-top: 0px!important;
+    border-width: 0px!important;
+    padding: 0px!important;
+    overflow: auto;
+}
+
+.box {
+    background-color: white;
+    width: 60%;
+    position: absolute;
+    left: 20%;
+    top: 10%;
+    padding: 20px;
+}
+
+.option {
+    display: none;
+}
+
+.label {
+    display: none;
+}
+
+.inputType {
+    display: none;
 }
