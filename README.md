@@ -14,8 +14,9 @@ To access the dashboard and the autofill simply just click on the plugin.
 ☑ Get all of the form values that need to be filled out. 
 
 ☑ Figure out what the question is for that input.
-- Allow the plugin to be able to pull user info from mongodb.
-- Question creation feature that takes in a question, alternative questions, and multiple types of inputs.
-- Display created questions and save user responses.
+☑ Allow the plugin to be able to pull user info from mongodb.
+☑ Question creation feature that takes in a question, alternative questions, and multiple types of inputs.
+☑ Display created questions.
+- Save user responses to questions.
 - Fill out needed feilds on a page based off of user responses.
 - Log feilds that were not able to be filled out.
