@@ -2,7 +2,7 @@ function compress(text) {
     if(text == undefined) {
         return undefined
     }
-    return text.trim().replaceAll("?", "").toLowerCase().replaceAll(" ", "")
+    return text.trim().replaceAll("?", "").toLowerCase().replaceAll(" ", "").replaceAll("*", "")
 }
  
 function nearby(element) {
