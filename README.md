@@ -14,6 +14,8 @@ To access the dashboard and the autofill simply just click on the plugin.
 ☑ Get all of the form values that need to be filled out. 
 
 ☑ Figure out what the question is for that input.
-- Create the website that allows the user to input their personal information.
-- Fill out feilds based on user information.
-- Create a developer dashboard that notifies any feilds that were not able to be filled out as well as where they are located.
+- Allow the plugin to be able to pull user info from mongodb.
+- Question creation feature that takes in a question, alternative questions, and multiple types of inputs.
+- Display created questions and save user responses.
+- Fill out needed feilds on a page based off of user responses.
+- Log feilds that were not able to be filled out.
