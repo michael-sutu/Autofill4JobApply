@@ -22,5 +22,7 @@ To access the dashboard and the autofill simply just click on the plugin.
 ☑ Display created questions.
 
 ☑ Save user responses to questions.
-- Fill out needed feilds on a page based off of user responses.
-- Log feilds that were not able to be filled out.
+
+☑ Fill out needed feilds on a page based off of user responses.
+
+☑ Log feilds that were not able to be filled out.
