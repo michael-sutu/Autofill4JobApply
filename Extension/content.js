@@ -1,5 +1,9 @@
 console.log("Autofill4JobApply is ready.")
 
+chrome.storage.sync.get(["userid"], function(items){
+    console.log(items)
+})
+
 function nearby(element) {
     let final = []
   
@@ -53,12 +57,25 @@ function fill(element) {
 }
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    if (request.action === "startAutofill") {
+    if (request.action == "startAutofill") {
         let searchFor = ["input", "textarea", "select"]
+        let total = 0
         for(let i = 0; i < searchFor.length; i++) {
             document.querySelectorAll(searchFor[i]).forEach((element) => {
                 fill(element)
+                total += 1
             })
         }
+        chrome.runtime.sendMessage({
+            msg: "stopAutofill", 
+            data: {
+                filled: 0,
+                total: total
+            }
+        })
+    } else if(request.action.split("-")[0] == "setUserid") {
+        chrome.storage.sync.set({ "userid": request.action.split("-")[1] }, function(){
+            console.log(request.action.split("-")[1])
+        })
     }
 })

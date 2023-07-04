@@ -23,12 +23,28 @@
         h2 {
             display: none;
         }
+
+        a {
+          cursor: pointer;
+          text-decoration: underline;
+        }
+
+        .badInput::-webkit-input-placeholder {
+          color: red;
+        }
     </style>
   </head>
   <body>
     <h1>Autofill4JobApply</h1>
-    <button id="autofillBtn">Start Autofill</button>
-    <button id="dashboardBtn">Dashboard</button>
-    <h2>Autofilling...</h2>
+    <div id="noauth" style="display: none;">
+      <p>What is your user id? You can view this <a>here</a>.</p>
+      <input>
+      <button style="margin-top: 10px;" id="submitBtn">Submit</button>
+    </div>
+    <div style="display: none;" id="auth">
+      <button id="autofillBtn">Start Autofill</button>
+      <button id="dashboardBtn">Dashboard</button>
+      <h2>Autofilling...</h2>
+    </div>
   </body>
 </html>

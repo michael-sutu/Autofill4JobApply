@@ -178,52 +178,82 @@ document.getElementById("submitAddBtn").addEventListener("click", (e) => {
     document.getElementById("cancelAddBtn").click()
 })
 
-fetch("/api/getQuestions")
+fetch("/api/authPlugin?userid="+localStorage.getItem("userid"))
     .then(response => response.json())
-    .then(data => {
-        for(let i = 0; i < data.length; i++) {
-            document.getElementById("devQuestions").innerHTML += `
-                <div>
-                    <h3>${data[i].question}</h3>
-                    <p>Alternatives: ${data[i].alternatives}</p>
-                <div>
-            `
+    .then(user => {
+        fetch("/api/getQuestions")
+            .then(response => response.json())
+            .then(data => {
+                for(let i = 0; i < data.length; i++) {
+                    document.getElementById("devQuestions").innerHTML += `
+                        <div>
+                            <h3>${data[i].question}</h3>
+                            <p>Alternatives: ${data[i].alternatives}</p>
+                        <div>
+                    `
             
-            let newDivId = makeid(10)
-            document.getElementById("userQuestions").innerHTML += `
-                <div>
-                    <h3>${data[i].question}</h3>
-                    <div id=${newDivId}></div>
-                </div>
-            `
+                    let newDivId = makeid(10)
+                    document.getElementById("userQuestions").innerHTML += `
+                        <div class="userQuestion">
+                            <h3>${data[i].question}</h3>
+                            <p style="display: none">${JSON.stringify(data[i].alternatives)}</p>
+                            <div id=${newDivId}></div>
+                        </div>
+                    `
 
-            for(let x = 0; x < data[i].feilds.length; x++) {
-                let item = data[i].feilds[x]
-                newItem = document.createElement(item.tag)
-                document.getElementById(newDivId).appendChild(newItem)
+                    for(let x = 0; x < data[i].feilds.length; x++) {
+                        let item = data[i].feilds[x]
+                        newItem = document.createElement(item.tag)
+                        document.getElementById(newDivId).appendChild(newItem)
 
-                if(item.tag == "input") {
-                    newItem.type = item.type
-                    newName = makeid(10)
-                    newItem.name = newName
-                    if(item.type == "radio" || item.type == "checkbox") {
-                        let newLabel = document.createElement("label")
-                        newLabel.textContent = item.label
-                        newLabel.htmlFor = newName
-                        newItem.style.display = "inline-block"
-                        document.getElementById(newDivId).appendChild(newLabel)
-                        document.getElementById(newDivId).appendChild(document.createElement("br"))
+                        if(item.tag == "input") {
+                            newItem.type = item.type
+                            newName = makeid(10)
+                            newItem.name = newName
+                            if(item.type == "radio" || item.type == "checkbox") {
+                                let newLabel = document.createElement("label")
+                                newLabel.textContent = item.label
+                                newLabel.htmlFor = newName
+                                newItem.style.display = "inline-block"
+                                document.getElementById(newDivId).appendChild(newLabel)
+                                document.getElementById(newDivId).appendChild(document.createElement("br"))
+                            }
+                        } else if(item.tag == "select") {
+                            newItem.style.marginBottom = "15px"
+                            for(let y = 0; y < item.options.length; y++) {
+                                let newOption = document.createElement("option")
+                                newOption.textContent = item.options[y]
+                                newItem.appendChild(newOption)
+                            }
+                        } else if(item.tag == "textarea") {
+                            newItem.style.marginBottom = "15px"
+                        }
                     }
-                } else if(item.tag == "select") {
-                    newItem.style.marginBottom = "15px"
-                    for(let y = 0; y < item.options.length; y++) {
-                        let newOption = document.createElement("option")
-                        newOption.textContent = item.options[y]
-                        newItem.appendChild(newOption)
-                    }
-                } else if(item.tag == "textarea") {
-                    newItem.style.marginBottom = "15px"
                 }
-            }
-        }
+
+                document.querySelectorAll(".userQuestion").forEach((e) => {
+                    let finalValue = ""
+                    for(let c = 0; c < user.Info.length; c++) {
+                        if(user.Info[c].Question == e.querySelector("h3").textContent) {
+                               finalValue = user.Info[c].Values[0]
+                        }
+                    }
+
+                    e.querySelector("div").children[0].value = finalValue
+                })
+            })
     })
+
+document.querySelector(".saveBtn").addEventListener("click", (e) => {
+    let values = document.getElementById("userQuestions").children
+    let newInfo = []
+    for(let i = 0; i < values.length; i++) {
+        let feildValues = []
+        for(let x = 0; x < values[i].querySelector("div").children.length; x++) {
+            feildValues.push(values[i].querySelector("div").children[x].value)
+        }
+        newInfo.push({"Question": values[i].querySelector("h3").textContent, "Alternatives": JSON.parse(values[i].querySelector("p").textContent), "Values": feildValues})
+    }
+
+    fetch(`/api/updateInfo?userid=${localStorage.getItem("userid")}&new=${JSON.stringify(newInfo)}`)
+})

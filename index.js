@@ -24,7 +24,8 @@ app.get("/api/new", async (req, res) => {
     await client.connect()
 	const db = client.db("users")
     await db.collection("people").insertOne({
-        "userid": req.query.userid
+        "userid": req.query.userid,
+        "Info": []
     })
 })
 
@@ -60,4 +61,10 @@ app.get("/api/getQuestions", async (req, res) => {
         }
     })
     res.json(result)
+})
+
+app.get("/api/updateInfo", async (req, res) => {
+    await client.connect()
+	const db = client.db("users")
+    await db.collection("people").updateOne({ userid: req.query.userid }, { $set: { Info: JSON.parse(req.query.new) }})
 })
