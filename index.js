@@ -1,7 +1,9 @@
 const express = require("express")
 const { MongoClient, ServerApiVersion } = require('mongodb')
+const cors = require("cors")
 const app = express()
 
+app.use(cors())
 app.listen(3000)
 console.log("Listening on http://localhost:3000")
 
@@ -67,4 +69,21 @@ app.get("/api/updateInfo", async (req, res) => {
     await client.connect()
 	const db = client.db("users")
     await db.collection("people").updateOne({ userid: req.query.userid }, { $set: { Info: JSON.parse(req.query.new) }})
+})
+
+app.get("/api/unknown", async (req, res) => {
+    await client.connect()
+	const db = client.db("users")
+    await db.collection("unknown").insertOne(JSON.parse(req.query.data))
+})
+
+app.get("/api/getUnknown", async (req, res) => {
+    await client.connect()
+	const db = client.db("users")
+	let result = await db.collection("unknown").find({}).toArray(function (err, result) {
+        if(err) {
+            console.log(err)
+        }
+    })
+    res.json(result)
 })

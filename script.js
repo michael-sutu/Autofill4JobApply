@@ -257,3 +257,15 @@ document.querySelector(".saveBtn").addEventListener("click", (e) => {
 
     fetch(`/api/updateInfo?userid=${localStorage.getItem("userid")}&new=${JSON.stringify(newInfo)}`)
 })
+
+fetch("/api/getUnknown")
+    .then(response => response.json())
+    .then(data => {
+        for(let i = 0; i < data.length; i++) {
+            document.getElementById("unknownDiv").innerHTML += `
+                <div>
+                    <p>${JSON.stringify(data[i])}</p>
+                </div>
+            ` 
+        }
+    })

@@ -1,9 +1,10 @@
-console.log("Autofill4JobApply is ready.")
-
-chrome.storage.sync.get(["userid"], function(items){
-    console.log(items)
-})
-
+function compress(text) {
+    if(text == undefined) {
+        return undefined
+    }
+    return text.trim().replaceAll("?", "").toLowerCase().replaceAll(" ", "")
+}
+ 
 function nearby(element) {
     let final = []
   
@@ -23,9 +24,21 @@ function nearby(element) {
 
     return final
 }
-  
 
-function fill(element) {
+function shrink(info) {
+    let final = []
+    for(let i = 0; i < info.length; i++) {
+        let value = info[i].Values[0]
+        let queries = [compress(info[i].Question)]
+        for(let x = 0; x < info[i].Alternatives.length; x++) {
+            queries.push(compress(info[i].Alternatives[x]))
+        }
+        final.push({"queries": queries, "value": value})
+    }
+    return final
+}
+
+function fill(element, info) {
     let elementType = element.nodeName.toLowerCase()
     let labels = []
     element.labels.forEach((label) => {
@@ -53,24 +66,55 @@ function fill(element) {
         elementData.value = element.value
     }
 
-    console.log(elementData)
+    for(let i = 0; i < info.length; i++) {
+        for(let x = 0; x < info[i].queries.length; x++) {
+            if(compress(elementData.labels[0]) == info[i].queries[x]) {
+                element.value = info[i].value
+                return 1
+            } else {
+                if(compress(elementData.nearby[0]) == info[i].queries[x]) {
+                    element.value = info[i].value
+                    return 1
+                } else {
+                    if(elementData.placeholder != undefined) {
+                        if(compress(elementData.placeholder) == info[i].queries[x]) {
+                            element.value = info[i].value
+                            return 1
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    fetch(`http://localhost:3000/api/unknown?data=${JSON.stringify(elementData)}`)
+    return 0
 }
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.action == "startAutofill") {
-        let searchFor = ["input", "textarea", "select"]
-        let total = 0
-        for(let i = 0; i < searchFor.length; i++) {
-            document.querySelectorAll(searchFor[i]).forEach((element) => {
-                fill(element)
-                total += 1
-            })
-        }
-        chrome.runtime.sendMessage({
-            msg: "stopAutofill", 
-            data: {
-                filled: 0,
-                total: total
+        chrome.storage.sync.get(["userid"], function(items) {
+            if(items.userid) {
+                fetch("http://localhost:3000/api/authPlugin?userid="+items.userid)
+                    .then(response => response.json())
+                    .then(data => {
+                        let searchFor = ["input", "textarea", "select"]
+                        let total = 0
+                        let filled = 0
+                        for(let i = 0; i < searchFor.length; i++) {
+                            document.querySelectorAll(searchFor[i]).forEach((element) => {
+                                filled += fill(element, shrink(data.Info))
+                                total += 1
+                            })
+                        }
+                        chrome.runtime.sendMessage({
+                            msg: "stopAutofill", 
+                            data: {
+                                filled: filled,
+                                total: total
+                            }
+                        })
+                    })
             }
         })
     } else if(request.action.split("-")[0] == "setUserid") {
