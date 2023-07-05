@@ -22,7 +22,7 @@ app.get("/style.css", (req, res) => {
     res.sendFile(__dirname+"/style.css")   
 })
 
-app.get("/api/new", async (req, res) => {
+app.get("/api/new", async (req, res) => { // creates a new user in mongodb once someone gets authenticated
     await client.connect()
 	const db = client.db("users")
     await db.collection("people").insertOne({
@@ -31,7 +31,7 @@ app.get("/api/new", async (req, res) => {
     })
 })
 
-app.get("/api/authPlugin", async (req, res) => {
+app.get("/api/authPlugin", async (req, res) => { // pulls user information
     await client.connect()
 	const db = client.db("users")
 	let current = await db.collection("people").findOne({"userid": req.query.userid})
@@ -42,7 +42,7 @@ app.get("/api/authPlugin", async (req, res) => {
     }
 })
 
-app.get("/api/addQuestion", async (req, res) => {
+app.get("/api/addQuestion", async (req, res) => { // adds a question to the database
     await client.connect()
 	const db = client.db("users")
     await db.collection("questions").insertOne({
@@ -54,7 +54,7 @@ app.get("/api/addQuestion", async (req, res) => {
     res.json("Done.")
 })
 
-app.get("/api/getQuestions", async (req, res) => {
+app.get("/api/getQuestions", async (req, res) => { // gets all the questions from the database
     await client.connect()
 	const db = client.db("users")
 	let result = await db.collection("questions").find({}).toArray(function (err, result) {
@@ -65,19 +65,19 @@ app.get("/api/getQuestions", async (req, res) => {
     res.json(result)
 })
 
-app.get("/api/updateInfo", async (req, res) => {
+app.get("/api/updateInfo", async (req, res) => { // update and users data for questions
     await client.connect()
 	const db = client.db("users")
     await db.collection("people").updateOne({ userid: req.query.userid }, { $set: { Info: JSON.parse(req.query.new) }})
 })
 
-app.get("/api/unknown", async (req, res) => {
+app.get("/api/unknown", async (req, res) => { // adds a value to the unknown queries database
     await client.connect()
 	const db = client.db("users")
     await db.collection("unknown").insertOne(JSON.parse(req.query.data))
 })
 
-app.get("/api/getUnknown", async (req, res) => {
+app.get("/api/getUnknown", async (req, res) => { // gets all unknown queries from the database
     await client.connect()
 	const db = client.db("users")
 	let result = await db.collection("unknown").find({}).toArray(function (err, result) {
@@ -86,4 +86,34 @@ app.get("/api/getUnknown", async (req, res) => {
         }
     })
     res.json(result)
+})
+
+app.get("/api/saveResults", async (req, res) => { // saves results from the save button to multiple databases
+    await client.connect()
+	const db = client.db("users")
+    let data = JSON.parse(req.query.data)
+    let newInfo = await db.collection("people").findOne({"userid": req.query.userid})
+    if(newInfo.Info) {
+        newInfo = newInfo.Info
+    } else {
+        newInfo = []
+    }
+    for(let i = 0; i < data.length; i++) {
+        await db.collection("questions").insertOne({
+            "question": data[i].question,
+            "alternatives": [],
+            "feilds": [{
+                "tag": data[i].tag,
+                "type": data[i].type
+            }]
+        })
+        newInfo.push({
+            "Question": data[i].question,
+            "Alternatives": [],
+            "Values": [data[i].value]
+        })
+    }
+
+    await db.collection("people").updateOne({ userid: req.query.userid }, { $set: { Info: newInfo }})
+    res.json("Done")
 })

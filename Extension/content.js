@@ -1,4 +1,4 @@
-function compress(text) {
+function compress(text) { // takes in a string then returns the same string with no spaces, question marks, *, and all lowercase.
     if(text == undefined) {
         return undefined
     }
@@ -10,14 +10,14 @@ function nearby(element) {
   
     let siblings = element.parentElement.children
   
-    while (siblings.length > 0 && final.length === 0) {
+    while (siblings.length > 0 && final.length === 0) { // goes through all the elements that are at the same level and checks for textContent
       for (let i = 0; i < siblings.length; i++) {
         if (siblings[i].textContent.trim().length > 0) {
             final.push(siblings[i].textContent)
         }
       }
   
-      if(final.length == 0) {
+      if(final.length == 0) { // if none are found move up to the parent nodes level
         siblings = siblings[0].parentElement.parentElement.children
       }
     }
@@ -25,7 +25,7 @@ function nearby(element) {
     return final
 }
 
-function shrink(info) {
+function shrink(info) { // takes in user info and gets rid of the information that is not needed aswell as compressing those strings to make it easier to match
     let final = []
     for(let i = 0; i < info.length; i++) {
         let value = info[i].Values[0]
@@ -38,8 +38,9 @@ function shrink(info) {
     return final
 }
 
-function fill(element, info) {
+function fill(element, info, changeValue) { 
     try {
+        // creates an object for the element and fills out all known values to later be used to fill out or to save
         let elementType = element.nodeName.toLowerCase()
         let labelList = []
         if(element.labels) {
@@ -71,39 +72,44 @@ function fill(element, info) {
             elementData.value = element.value
         }
 
-        for(let i = 0; i < info.length; i++) {
-            for(let x = 0; x < info[i].queries.length; x++) {
-                if(compress(elementData.labels[0]) == info[i].queries[x]) {
-                    element.value = info[i].value
-                    return 1
-                } else {
-                    if(compress(elementData.nearby[0]) == info[i].queries[x]) {
+        if(changeValue) { // fills out the elements based off of elementData
+            for(let i = 0; i < info.length; i++) {
+                for(let x = 0; x < info[i].queries.length; x++) {
+                    if(compress(elementData.labels[0]) == info[i].queries[x]) {
                         element.value = info[i].value
                         return 1
                     } else {
-                        if(elementData.placeholder != undefined) {
-                            if(compress(elementData.placeholder) == info[i].queries[x]) {
-                                element.value = info[i].value
-                                return 1
+                        if(compress(elementData.nearby[0]) == info[i].queries[x]) {
+                            element.value = info[i].value
+                            return 1
+                        } else {
+                            if(elementData.placeholder != undefined) {
+                                if(compress(elementData.placeholder) == info[i].queries[x]) {
+                                    element.value = info[i].value
+                                    return 1
+                                }
                             }
                         }
                     }
                 }
             }
+        
+            // saves elementData to unknown queries
+            //fetch(`http://localhost:3000/api/unknown?data=${JSON.stringify(elementData)}`)
+            return 0
+        } else { // just returns elementData for the save feature
+            return elementData
         }
-    
-        //fetch(`http://localhost:3000/api/unknown?data=${JSON.stringify(elementData)}`)
-        return 0
     } catch(error) {
         console.log(error)
     }
 }
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    if (request.action == "startAutofill") {
-        chrome.storage.sync.get(["userid"], function(items) {
+    if (request.action == "startAutofill") { // to start autofilling in feilds
+        chrome.storage.sync.get(["userid"], function(items) { 
             if(items.userid) {
-                fetch("http://localhost:3000/api/authPlugin?userid="+items.userid)
+                fetch("http://localhost:3000/api/authPlugin?userid="+items.userid) // gets the userinformation
                     .then(response => response.json())
                     .then(data => {
                         let searchFor = ["input", "textarea", "select"]
@@ -114,9 +120,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
                             document.getElementById("input-7").click()
                         }
 
-                        for(let i = 0; i < searchFor.length; i++) {
+                        for(let i = 0; i < searchFor.length; i++) { // goes through all inputs, textareas, and selects on the screen to try to fill out
                             document.querySelectorAll(searchFor[i]).forEach((element) => {
-                                filled += fill(element, shrink(data.Info))
+                                filled += fill(element, shrink(data.Info), true)
                                 total += 1
                             })
                         }
@@ -129,7 +135,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
                         let HorL = ""
                         let ethnicity = ""
                         let veteran = ""
-                        for(let i = 0; i < data.Info.length; i++) {
+                        for(let i = 0; i < data.Info.length; i++) { // gets special cases for certain elements on webpages
                             if(data.Info[i].Question == "State") {
                                 state = data.Info[i].Values[0]
                             } else if(data.Info[i].Question == "Start Work Month") {
@@ -156,6 +162,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
                             }
                         })
 
+                        // looks for specfic inputs and filling those with the other inputs that were defined earlier
                         let r = 0
                         if(document.querySelector(".css-hdh0bo")) {
                             document.querySelectorAll(".css-hdh0bo").forEach((e) => {
@@ -237,7 +244,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
                             })
                         }
 
-                        chrome.runtime.sendMessage({
+                        chrome.runtime.sendMessage({ // sends the message back to stock autofilling
                             msg: "stopAutofill", 
                             data: {
                                 filled: filled,
@@ -250,6 +257,39 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     } else if(request.action.split("-")[0] == "setUserid") {
         chrome.storage.sync.set({ "userid": request.action.split("-")[1] }, function(){
             console.log(request.action.split("-")[1])
+        })
+    } else if(request.action == "startSave") { // to start saving filled in feilds
+        let searchFor = ["input", "textarea", "select"]
+        let total = 0
+        let filled = 0
+        let results = []
+
+        for(let i = 0; i < searchFor.length; i++) { // gets all the feilds
+            document.querySelectorAll(searchFor[i]).forEach((element) => {
+                results.push(fill(element, [], false))
+                total += 1
+            })
+        }
+
+        let newResults = []
+        for(let i = 0; i < results.length; i++) { // gets all the filled in feilds
+            if(results[i].value != "" && results[i].inputType != "radio" && results[i].labels.length > 0) {
+                newResults.push({"question": results[i].labels[0], "tag": results[i].type, "type": results[i].inputType, "value": results[i].value})
+            }
+        }
+
+        chrome.storage.sync.get(["userid"], function(items) { // saves the results to that userid
+            fetch("http://localhost:3000/api/saveResults?data="+JSON.stringify(newResults)+"&userid="+items.userid)
+                .then(response => response.json())
+                .then(data => {
+                    chrome.runtime.sendMessage({
+                        msg: "doneSaving", 
+                        data: {
+                            filled: newResults.length,
+                            total: total
+                        }
+                    })
+                })
         })
     }
 })

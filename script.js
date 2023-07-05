@@ -1,4 +1,4 @@
-function makeid(length) {
+function makeid(length) { // returns a random string of characters
     let result = ''
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
     const charactersLength = characters.length
@@ -11,7 +11,7 @@ function makeid(length) {
 }
 
 let navButtons = document.querySelector(".sidenav").children
-for(let i = 0; i < navButtons.length; i++) {
+for(let i = 0; i < navButtons.length; i++) { // handles the side navigation bar
     navButtons[i].addEventListener("click", (e) => {
         button = e.target
         if(e.target.textContent == "Information") {
@@ -27,7 +27,7 @@ for(let i = 0; i < navButtons.length; i++) {
     })
 }
 
-if(localStorage.getItem("userid")) {
+if(localStorage.getItem("userid")) { // checks whether the user has a userid
     document.querySelector("h2").textContent = "Your userid is "+localStorage.getItem("userid")
 } else {
     let newid = makeid(15)
@@ -43,7 +43,7 @@ document.getElementById("addBtn").addEventListener("click", (e) => {
 let options = []
 let alternatives = []
 let feilds = []
-document.getElementById("cancelAddBtn").addEventListener("click", (e) => {
+document.getElementById("cancelAddBtn").addEventListener("click", (e) => { // resets add button div to be ready for next question that will be added
     feilds = []
     options = []
     document.getElementById("optionsDisplay").textContent = "Options: "+JSON.stringify(options)
@@ -69,7 +69,7 @@ document.getElementById("cancelAddBtn").addEventListener("click", (e) => {
     document.querySelector(".addDiv").style.display = "none"
 })
 
-document.querySelector(".elementTag").addEventListener("change", (e) => {
+document.querySelector(".elementTag").addEventListener("change", (e) => { // listens for when a new feild type is changes to display different information
     document.querySelector(".label").style.display = "none"
     document.querySelector(".label").value = ""
     document.querySelector(".inputType").value = "Input Type"
@@ -106,14 +106,14 @@ document.querySelector(".elementTag").addEventListener("change", (e) => {
     }
 })
 
-document.querySelector(".inputType").addEventListener("change", (e) => {
+document.querySelector(".inputType").addEventListener("change", (e) => { // listens for when the input type is changes in order to display the label prompt
     document.querySelector(".label").style.display = "none"
     if(e.target.value == "radio" || e.target.value == "checkbox") {
         document.querySelector(".label").style.display = "inline-block"
     }
 })
 
-document.getElementById("addFeildBtn").addEventListener("click", (e) => {
+document.getElementById("addFeildBtn").addEventListener("click", (e) => { // pulls up the add question div
     let entry = {}
     let newName = makeid(10)
     document.querySelector(".inputsDiv").style.border = "1px solid black"
@@ -149,19 +149,19 @@ document.getElementById("addFeildBtn").addEventListener("click", (e) => {
     feilds.push(entry)
 })
 
-document.getElementById("addOptionBtn").addEventListener("click", (e) => {
+document.getElementById("addOptionBtn").addEventListener("click", (e) => { // adds an option to a selct feild
     options.push(document.getElementById("optionInput").value)
     document.getElementById("optionInput").value = ""
     document.getElementById("optionsDisplay").textContent = "Options: "+JSON.stringify(options)
 })
 
-document.getElementById("alternativesAddBtn").addEventListener("click", (e) => {
+document.getElementById("alternativesAddBtn").addEventListener("click", (e) => { // adds and alternative string to a question
     alternatives.push(document.getElementById("alternativesInput").value)
     document.getElementById("alternativesInput").value = ""
     document.getElementById("alternativesList").textContent = "Alternatives: "+JSON.stringify(alternatives)
 })
 
-document.getElementById("submitAddBtn").addEventListener("click", (e) => {
+document.getElementById("submitAddBtn").addEventListener("click", (e) => { // creates the new question
     let newQuestion = document.getElementById("questionInput").value
     let newAlternatives = alternatives
     let newFeilds = feilds
@@ -178,7 +178,7 @@ document.getElementById("submitAddBtn").addEventListener("click", (e) => {
     document.getElementById("cancelAddBtn").click()
 })
 
-fetch("/api/authPlugin?userid="+localStorage.getItem("userid"))
+fetch("/api/authPlugin?userid="+localStorage.getItem("userid")) // pulls the user information from the database
     .then(response => response.json())
     .then(user => {
         fetch("/api/getQuestions")
@@ -244,7 +244,7 @@ fetch("/api/authPlugin?userid="+localStorage.getItem("userid"))
             })
     })
 
-document.querySelector(".saveBtn").addEventListener("click", (e) => {
+document.querySelector(".saveBtn").addEventListener("click", (e) => { // save all filled in questions to the database
     let values = document.getElementById("userQuestions").children
     let newInfo = []
     for(let i = 0; i < values.length; i++) {
@@ -258,7 +258,7 @@ document.querySelector(".saveBtn").addEventListener("click", (e) => {
     fetch(`/api/updateInfo?userid=${localStorage.getItem("userid")}&new=${JSON.stringify(newInfo)}`)
 })
 
-fetch("/api/getUnknown")
+fetch("/api/getUnknown") // gets and displays unknown queries
     .then(response => response.json())
     .then(data => {
         for(let i = 0; i < data.length; i++) {
