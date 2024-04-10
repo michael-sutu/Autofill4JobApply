@@ -1,28 +1,31 @@
-# Autofill4JobApply
-### How to setup
-Close the project. Go to chrome://extensions/ and toggle on developer mode (top right corner). Next click "Load unpacked" and select the "Extension" folder in the github repo. Now the extension should be up and running! 
+# Autofill4JobApply Chrome Extension
 
-You then need to go into the terminal and run `node index.js` to start the dashboard link.
+Autofill4JobApply is a Chrome Extension designed to streamline the job application process. By allowing users to enter their personal information once and then autofilling this information in job application forms on various websites, Autofill4JobApply saves time and reduces the monotony of job searching.
 
-To access the dashboard and the autofill simply just click on the plugin.
+## Features
 
-### TODO
-☑ Set up an extension.
+- **One-Time Data Entry:** Users input their personal information once, including name, contact details, employment history, education, and more.
+- **Universal Autofill:** Seamlessly autofill job application forms across a wide range of websites with your stored information.
+- **Custom Question Mapping:** Ability to handle custom questions and fields found in different job application forms by mapping them to your stored information.
+- **Data Privacy:** Your information is stored securely and used only for autofilling application forms at your command.
 
-☑ Read the contents of the page. 
+## Installation
 
-☑ Get all of the form values that need to be filled out. 
+1. Clone the Autofill4JobApply repository:
+    ```bash
+    git clone https://github.com/michael-sutu/Autofill4JobApply.git
+    ```
+2. Open the Chrome browser and navigate to `chrome://extensions/`.
+3. Enable "Developer mode" at the top right.
+4. Click "Load unpacked" and select the cloned Autofill4JobApply directory.
+5. The extension should now be installed and will appear in your extensions list.
 
-☑ Figure out what the question is for that input.
+## Usage
 
-☑ Allow the plugin to be able to pull user info from mongodb.
+1. **Data Entry:** After installing the extension, click on its icon in the Chrome toolbar to open the data entry form. Enter your information that you commonly use for job applications.
+2. **Autofilling Forms:** Navigate to a job application form online. The Autofill4JobApply icon will indicate if it can autofill the form. Click the extension icon and select "Autofill" to populate the form with your information.
+3. **Custom Mapping:** For application forms with unique fields, you can map these to the relevant information stored in Autofill4JobApply from the extension's interface.
 
-☑ Question creation feature that takes in a question, alternative questions, and multiple types of inputs.
+## Security and Privacy
 
-☑ Display created questions.
-
-☑ Save user responses to questions.
-
-☑ Fill out needed feilds on a page based off of user responses.
-
-☑ Log feilds that were not able to be filled out.
+We take your privacy and security seriously. Autofill4JobApply stores your personal information locally on your device and only uses it for autofilling application forms at your discretion. No information is ever transmitted without your explicit consent.
